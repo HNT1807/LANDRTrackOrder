@@ -49,21 +49,21 @@ def get_key_sort_value(key_str):
     # Normalize case for parsing
     key_str = key_str.lower()
     
-    # Define the chromatic scale order (starting from C for simplicity in mapping)
+    # Define the chromatic scale order, starting from A for sorting purposes
     # Maps note name (and its enharmonic equivalent) to a sortable number.
     note_map = {
-        'c': 0, 'b#': 0,
-        'c#': 1, 'db': 1,
-        'd': 2,
-        'd#': 3, 'eb': 3,
-        'e': 4, 'fb': 4, # fb is rare but possible
-        'f': 5, 'e#': 5, # e# is rare
-        'f#': 6, 'gb': 6,
-        'g': 7,
-        'g#': 8, 'ab': 8,
-        'a': 9,
-        'a#': 10, 'bb': 10,
-        'b': 11, 'cb': 11 # cb is rare
+        'a': 0,
+        'a#': 1, 'bb': 1,
+        'b': 2, 'cb': 2, # cb is rare
+        'c': 3, 'b#': 3, # b# is rare
+        'c#': 4, 'db': 4,
+        'd': 5,
+        'd#': 6, 'eb': 6,
+        'e': 7, 'fb': 7, # fb is rare
+        'f': 8, 'e#': 8, # e# is rare
+        'f#': 9, 'gb': 9,
+        'g': 10,
+        'g#': 11, 'ab': 11
     }
 
     # Basic regex to extract the note part (e.g., 'f#', 'f', 'bb') from the key string (e.g., 'f#m', 'fm', 'bb')
