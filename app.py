@@ -44,11 +44,39 @@ def parse_filename(filename):
         st.warning(f"Could not parse metadata (key, bpm) from filename: {filename}. Ensure it follows the pattern '..._keyKey_BPMbpm.wav'. Skipping this file.")
         return None
 
-# Define key order (simple alphabetical for now)
-# More complex musical sorting could be added here if needed
+# Define key order based on musical pitch
 def get_key_sort_value(key_str):
-    # Simple alphabetical sort is used as requested
-    return key_str.upper()
+    # Normalize case for parsing
+    key_str = key_str.lower()
+    
+    # Define the chromatic scale order (starting from C for simplicity in mapping)
+    # Maps note name (and its enharmonic equivalent) to a sortable number.
+    note_map = {
+        'c': 0, 'b#': 0,
+        'c#': 1, 'db': 1,
+        'd': 2,
+        'd#': 3, 'eb': 3,
+        'e': 4, 'fb': 4, # fb is rare but possible
+        'f': 5, 'e#': 5, # e# is rare
+        'f#': 6, 'gb': 6,
+        'g': 7,
+        'g#': 8, 'ab': 8,
+        'a': 9,
+        'a#': 10, 'bb': 10,
+        'b': 11, 'cb': 11 # cb is rare
+    }
+
+    # Basic regex to extract the note part (e.g., 'f#', 'f', 'bb') from the key string (e.g., 'f#m', 'fm', 'bb')
+    match = re.match(r"^([a-g][#b]?)", key_str)
+    if match:
+        note = match.group(1)
+        # Return the mapped value, or a high value if not found (shouldn't happen with valid keys)
+        return note_map.get(note, 99) 
+    else:
+        # Fallback for unexpected key formats: attempt alphabetical on the whole string?
+        # Or return a high value to sort them last.
+        st.warning(f"Could not parse note from key: {key_str}. Sorting alphabetically as fallback.")
+        return 99 # Or could return key_str for alphabetical fallback
 
 # Function to create highlighted preview string
 def create_highlighted_preview(text, start_index_1_based):
